@@ -1,0 +1,24 @@
+# Decebal-27B — Python dependencies (Phase 1: data gathering)
+# Install: pip install -r requirements.txt
+
+# Core data loading (parquet streaming + builder-based datasets like Dolma)
+datasets>=2.19.0
+huggingface_hub[cli]>=0.24.0
+
+# Parquet / Arrow backend for fast reads
+pyarrow>=15.0.0
+pandas>=2.0.0
+
+# HTTP (Wikipedia dump, misc downloads)
+requests>=2.31.0
+
+# Wikipedia XML → clean text (for P2 preprocess; install early to test on sample)
+mwparserfromhell>=0.6.0
+beautifulsoup4>=4.12.0
+
+# Language detection for P2 quality filters
+fasttext>=0.9.2 ; platform_system != "Windows"  # Windows: use langdetect fallback
+langdetect>=1.0.9
+
+# Progress bars (streaming large datasets)
+tqdm>=4.65.0

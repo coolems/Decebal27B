@@ -1,0 +1,97 @@
+{
+  "version": "v1",
+  "description": "Commercial-safe continued-pretraining mixture for Decebal-27B. Weights are relative token shares.",
+  "commercial_safe_only": true,
+  "sources": [
+    {
+      "id": "fineweb2_ro",
+      "role": "romanian_web_bulk",
+      "weight": 0.45,
+      "hf_id": "HuggingFaceFW/fineweb-2",
+      "config": "ron_Latn",
+      "license": "odc-by-1.0",
+      "local_dir": "data/raw/web_global/fineweb2_ro"
+    },
+    {
+      "id": "wikipedia_ro",
+      "role": "romanian_curated",
+      "weight": 0.1,
+      "source_url": "https://dumps.wikimedia.org/rowiki/latest/",
+      "license": "cc-by-sa-4.0",
+      "local_dir": "data/raw/romanian/wikipedia_ro"
+    },
+    {
+      "id": "mc4_ro_refiltered",
+      "role": "romanian_web_topup",
+      "weight": 0.15,
+      "hf_id": "allenai/c4",
+      "config": "ro",
+      "license": "odc-by-1.0",
+      "note": "must pass our datatrove re-filter (old pipeline) before use",
+      "local_dir": "data/raw/romanian/mc4_ro"
+    },
+    {
+      "id": "gov_legal_ro",
+      "role": "romanian_civic",
+      "weight": 0.05,
+      "sources": [
+        "dataguvernanta.ro",
+        "parlamentul.ro"
+      ],
+      "license": "public-domain/open-data per portal",
+      "local_dir": "data/raw/romanian/gov_legal"
+    },
+    {
+      "id": "fineweb_edu_en_sample",
+      "role": "english_ballast_knowledge",
+      "weight": 0.12,
+      "hf_id": "HuggingFaceFW/fineweb-edu-score-2",
+      "license": "odc-by-1.0",
+      "local_dir": "data/raw/web_global/fineweb_edu_en"
+    },
+    {
+      "id": "dolma_books_wiki_sample",
+      "role": "english_ballast_longform",
+      "weight": 0.05,
+      "hf_id": "allenai/dolma",
+      "license": "odc-by-1.0",
+      "local_dir": "data/raw/web_global/dolma"
+    },
+    {
+      "id": "the_stack_v2_code",
+      "role": "code",
+      "weight": 0.06,
+      "hf_id": "bigcode/the-stack-v2",
+      "languages": [
+        "python",
+        "javascript",
+        "typescript"
+      ],
+      "license": "BigCode Open Datasets LICENSE v1.0 (check per-language subset)",
+      "local_dir": "data/raw/code/the_stack_v2"
+    },
+    {
+      "id": "cosmopedia_synthetic_sample",
+      "role": "synthetic_quality_ballast",
+      "weight": 0.02,
+      "hf_id": "HuggingFaceTB/SmolLM-Corpus",
+      "config": "cosmopedia-v2",
+      "license": "odc-by-1.0",
+      "local_dir": "data/raw/web_global/cosmopedia"
+    }
+  ],
+  "research_track_only_do_not_mix_into_commercial": [
+    {
+      "id": "cultura_x_ro",
+      "hf_id": "uonlp/CulturaX",
+      "config": "ro",
+      "license": "UNVERIFIED - no license tag on HF card; treat as research-only until confirmed with authors"
+    },
+    {
+      "id": "oscar_2301_ro",
+      "hf_id": "oscar-corpus/OSCAR-2301",
+      "config": "ro",
+      "license": "research-only (gated)"
+    }
+  ]
+}

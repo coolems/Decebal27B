@@ -1,0 +1,18 @@
+# Decebal-27B/
+*.pyc
+__pycache__/
+.ipynb_checkpoints/
+
+# heavy stuff stays out of git (keep placeholder dirs tracked)
+data/raw/**
+!data/raw/.gitkeep
+data/processed/**
+!data/processed/.gitkeep
+data/tokenized/**
+!data/tokenized/.gitkeep
+checkpoints/**
+!checkpoints/.gitkeep
+
+# scratch only
+.temp/*
+!.temp/.gitkeep

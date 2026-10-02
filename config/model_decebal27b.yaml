@@ -1,0 +1,53 @@
+# Continued-pretraining skeleton for Decebal-27B (Romanian LLM)
+# Verified 2026-10-02 via HF API + model card frontmatter:
+#   Qwen/Qwen3.8-27B -> license: apache-2.0, public (gated: false), ~6.9M downloads.
+# Architecture (from repo config.json): model_type=qwen3_5, class=Qwen3_5ForConditionalGeneration
+#   (vision-language; we train the LM path for text CPT), hidden 5120 x 64 layers,
+#   hybrid attention: 16x(3 linear-attn + 1 full softmax attn), vocab 248320,
+#   native context 262144 (extensible toward ~1M), MTP module (1 layer).
+
+skeleton:
+  primary:
+    hf_id: Qwen/Qwen3.8-27B        # dense 27B VLM, Apache 2.0 — verified via HF API 2026-10-02
+    local_dir: checkpoints/skeleton/qwen3.8-27b
+    license: apache-2.0
+    revision: "PIN_COMMIT_SHA_HERE" # record exact sha in data/manifests/provenance.json at download time
+  inference_variant:                # serving/eval only — NEVER train from quantized weights
+    hf_id: Qwen/Qwen3.8-27B-FP8
+    license: apache-2.0
+  smoke_test:                       # same model, cheap adapter path (no separate small skeleton)
+    method: lora
+    r: 64
+    alpha: 128
+    target_modules: [q_proj, k_proj, v_proj, o_proj]   # extend to linear-attn projections once mapped in src/model/
+    note: "Single-node (8x80GB) smoke on the full 27B; validates pipeline before full-param CPT."
+  alternative_mit_track:            # OPTIONAL A/B comparison only — not used by default
+    hf_id: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
+    local_dir: checkpoints/skeleton/r1-distill-qwen-7b
+    license: mit
+
+training:
+  stage: continued_pretraining
+  framework: transformers+FSDP     # or DeepSpeed ZeRO-3; full-param needs ~2x8x80GB nodes, single node = LoRA smoke
+  precision: bf16
+  seq_length: 4096                 # CPT starts short; native context is 262k — extend in a dedicated stage
+  global_batch_tokens: 2097152     # ~2M tokens/step target, tune to hardware
+  learning_rate: 2.0e-5
+  min_learning_rate: 2.0e-6
+  warmup_ratio: 0.03
+  scheduler: cosine
+  weight_decay: 0.1
+  adam_beta2: 0.95                 # multilingual-CPT friendly
+  gradient_clipping: 1.0
+  freeze: none                     # full-param CPT (2 nodes); single-node runs use the smoke_test LoRA config above
+  vision_tower: frozen             # text-only CPT — keep ViT + MTP params untouched, train the LM path
+  target_tokens_ro_share: 0.70     # keep ~70% Romanian tokens in the stream
+
+data:
+  mixture_config: config/data_mixture.json
+  processed_dir: data/processed
+  tokenized_dir: data/tokenized
+
+checkpoints:
+  out_dir: checkpoints/cpt_decebal27b_ro
+  save_every_tokens: 2500000000    # every 2.5B tokens
