@@ -107,3 +107,4 @@ useful for tokenizer experiments and as an ablation. See [docs/03_roadmap.md](03
 | 2026-10-02 | Smoke test = LoRA r=64 on the full 27B, not a smaller model | Qwen3.8 has no small dense checkpoint — pre-root-fix migration session, see docs/01_model_skeletons.md |
 | 2026-10-02 | CulturaX-ro / OSCAR-ro = research track only | Licenses unverified → honesty rule "no license, no training" for the commercial track |
 | 2026-10-02 | Re-audit after fixes (plan_20261002_1332.md): all 7 prior defects verified fixed; also fixed 5 broken plan links in this file, removed stale .backup + __pycache__ artifacts |
+- **2026-10-02** — Project published to GitHub: `https://github.com/coolems/Decebal27B` (commit df52941, 23 files). Heavy data/checkpoints stay git-ignored; placeholder dirs tracked via .gitkeep.
